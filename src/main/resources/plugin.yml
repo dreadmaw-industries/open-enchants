@@ -1,0 +1,8 @@
+name: MyFirstPlugin
+version: ${project.version}
+main: dreadmaw.industries.openenchants.Plugin
+version: 0.0.1
+api-version: 1.8.8
+authors: [ konst-aa ]
+description: My first plugin ever
+website: https://github.com/dreadmaw-industries/open-enchant.git
