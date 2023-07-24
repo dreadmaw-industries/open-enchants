@@ -1,8 +1,15 @@
-name: MyFirstPlugin
+name: OpenEnchants
 version: ${project.version}
-main: dreadmaw.industries.openenchants.Plugin
+main: industries.dreadmaw.openenchants.Plugin
 version: 0.0.1
 api-version: 1.8.8
 authors: [ konst-aa ]
-description: My first plugin ever
-website: https://github.com/dreadmaw-industries/open-enchant.git
+description: Custom enchantments framework WIP
+website: https://github.com/dreadmaw-industries/open-enchants.git
+commands:
+  menu:
+    description: Open the inventory menu
+  customenchant:
+    description: Enchant stuff
+  customanvil:
+    description: Enchanting interface
