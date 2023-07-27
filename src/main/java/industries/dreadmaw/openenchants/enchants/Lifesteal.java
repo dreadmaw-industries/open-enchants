@@ -6,8 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.Plugin;
 
-public class Lifsteal extends Enchantment {
-    public Lifsteal(int level, Plugin plugin) {
+public class Lifesteal extends Enchantment {
+    public Lifesteal(int level, Plugin plugin) {
         super(level, plugin);
     }
 

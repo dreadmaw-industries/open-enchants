@@ -4,19 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-
+import java.util.HashMap;
 import industries.dreadmaw.openenchants.Plugin;
 
 public class Parse {
+    static HashMap<String, Integer> rageMap = new HashMap<String, Integer>();
     static Enchantment getEnchantment(String enchantName, int level, Plugin plugin) {
         if (enchantName.equals(ChatColor.YELLOW + "Bleed")) {
             return new Bleed(level, plugin);
         } else if (enchantName.equals(ChatColor.GOLD + "Lifesteal")) {
-            return new Lifsteal(level, plugin);
+            return new Lifesteal(level, plugin);
+        } else if (enchantName.equals(ChatColor.GOLD + "Rage")) {
+            return new Rage(level, plugin,rageMap);
         } else {
+            
             return null;
-        }
+        } 
     }
+    
     static List<Enchantment> parseEnchantments(List<String> lore, Plugin plugin) {
         List<Enchantment> enchants = new ArrayList<Enchantment>();
         for (String line : lore) {
