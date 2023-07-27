@@ -28,6 +28,15 @@ public class EnchantmentBook {
         this.enchantName = lines[0].split(" ")[0];
         this.level = Integer.parseInt(lines[0].split(" ")[1]);
 
+        String successDestroyRatesLine = lines[1];
+        int numPos1, numPos2;
+
+        numPos1 = successDestroyRatesLine.indexOf('%');
+        numPos2 = successDestroyRatesLine.lastIndexOf('%');
+
+        this.successRate = Integer.parseInt(successDestroyRatesLine.substring(numPos1 - 2, numPos1));
+        this.destroyRate = Integer.parseInt(successDestroyRatesLine.substring(numPos2 - 2, numPos2));
+
         this.description = "";
         if (lines.length >= 3) {
             for (int i = 2; i < lines.length; i++) {
