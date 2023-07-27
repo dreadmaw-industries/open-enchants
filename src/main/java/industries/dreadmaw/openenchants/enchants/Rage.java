@@ -44,8 +44,8 @@ public class Rage extends Enchantment {
 
             OE_rageMap.put(id, counter);
             //if counter is less than or equal to 5, increase damage by 10% per stack
-            if(counter <=5 )
-               event.setDamage(event.getDamage() * Math.pow(1.1 ,counter));
+            if(counter >6 )
+               event.setDamage(event.getDamage() * Math.pow(1.04 + level/10,6));
 
         }
 
