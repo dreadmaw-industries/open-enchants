@@ -4,15 +4,11 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-public class Applicable {
-    protected Plugin plugin;
-    public Applicable(Plugin plugin) {
-        this.plugin = plugin;
-    }
-    public static boolean is(ItemStack e) {
+public interface Applicable {
+    public static boolean isValid(InventoryClickEvent ie) {
         return false;
     }
-    public static ItemStack apply(InventoryClickEvent ie) {
+    public static ItemStack apply(InventoryClickEvent ie, Plugin plugin) {
         return ie.getCurrentItem();
     }
     

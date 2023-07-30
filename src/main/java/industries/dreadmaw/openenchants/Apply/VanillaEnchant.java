@@ -10,13 +10,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import industries.dreadmaw.openenchants.Plugin;
 
-public class VanillaEnchant extends Applicable {
+public class VanillaEnchant implements Applicable {
+    private Plugin plugin;
     public VanillaEnchant(Plugin plugin) {
-        super(plugin);
+        this.plugin = plugin;
     }
 
-    public static boolean is(ItemStack e) {
-        return e.getType() == org.bukkit.Material.ENCHANTED_BOOK;
+    public static boolean isValid(InventoryClickEvent ie) {
+        return ie.getCursor().getType() == org.bukkit.Material.ENCHANTED_BOOK;
     }
 
     public static ItemStack apply(InventoryClickEvent ie) {

@@ -1,55 +1,116 @@
 package industries.dreadmaw.openenchants.enchants;
 
-import org.bukkit.ChatColor;
+import java.util.ArrayList;
+import java.util.Random;
 
-public class EnchantmentBook {
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Effect;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
+
+import industries.dreadmaw.openenchants.Apply.Applicable;
+
+public class EnchantmentBook implements Applicable {
     private String enchantName, description;
     private int level;
     private int successRate, destroyRate;
+    private String applicableType;
 
-    public EnchantmentBook(String enchantName, int level, int successRate, int destroyRate) {
-        this(enchantName, level, successRate, destroyRate, "");
-    }
-
-    public EnchantmentBook(String enchantName, int level, int successRate, int destroyRate, String description) {
+    public EnchantmentBook(String enchantName, int level, int successRate, int destroyRate, String description,
+            String applicableType) {
         this.enchantName = enchantName;
         this.level = level;
         this.successRate = successRate;
         this.destroyRate = destroyRate;
         this.description = description;
+        this.applicableType = applicableType;
     }
 
-    public EnchantmentBook(String enchantmentBookString) {
-        String[] lines = enchantmentBookString.split("\n");
-        if (lines.length < 2) { // all enchantmentBook strings will have >= 2 lines
-            System.out.println(lines.length);
-            throw new IllegalArgumentException("Improper format for a enchantmentBook string!");
+    public EnchantmentBook(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        String[] split = meta.getDisplayName().split(" ");
+        enchantName = Parse.strip(split[0]);
+        level = Integer.parseInt(split[1]);
+        ArrayList<String> lore = (ArrayList<String>) meta.getLore();
+        successRate = Integer.parseInt(lore.get(0).split(" ")[2].split("%")[0]);
+        destroyRate = Integer.parseInt(lore.get(1).split(" ")[2].split("%")[0]);
+        applicableType = lore.get(2).split(" ")[0];
+        description = lore.get(3);
+    }
+
+    public static boolean isValid(InventoryClickEvent ie) {
+        if (!ie.getCursor().getType().equals(Material.BOOK)) {
+            return false;
         }
-        this.enchantName = lines[0].split(" ")[0];
-        this.level = Integer.parseInt(lines[0].split(" ")[1]);
+        try {
+            new EnchantmentBook(ie.getCursor());
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+        EnchantmentBook book = new EnchantmentBook(ie.getCursor());
+        if (book.getApplicableType() == "Axe" && (ie.getCurrentItem().getType() == Material.DIAMOND_AXE
+                || ie.getCurrentItem().getType() == Material.IRON_AXE
+                || ie.getCurrentItem().getType() == Material.STONE_AXE
+                || ie.getCurrentItem().getType() == Material.WOOD_AXE)) {
+            return true;
+        }
+        return true;
 
-        String successDestroyRatesLine = lines[1];
-        int numPos1, numPos2;
+    }
 
-        numPos1 = successDestroyRatesLine.indexOf('%');
-        numPos2 = successDestroyRatesLine.lastIndexOf('%');
+    public static ItemStack apply(InventoryClickEvent ie, Plugin plugin) {
+        EnchantmentBook book = new EnchantmentBook(ie.getCursor());
+        Random rand = new Random();
+        HumanEntity en = ie.getWhoClicked();
+        if (rand.nextInt(100) < book.getSuccessRate()) {
+            ItemStack item = ie.getCurrentItem();
+            ItemMeta meta = item.hasItemMeta() ? item.getItemMeta()
+                    : Bukkit.getItemFactory().getItemMeta(item.getType());
+            ArrayList<String> lore = meta.hasLore() ? (ArrayList<String>) meta.getLore() : new ArrayList<String>();
+            lore.add(Parse.colors.get(book.getEnchantName()) + book.getEnchantName() + " " + book.getLevel());
+            meta.setLore(lore);
+            item.setItemMeta(meta);
 
-        this.successRate = Integer.parseInt(successDestroyRatesLine.substring(numPos1 - 2, numPos1));
-        this.destroyRate = Integer.parseInt(successDestroyRatesLine.substring(numPos2 - 2, numPos2));
-
-        this.description = "";
-        if (lines.length >= 3) {
-            for (int i = 2; i < lines.length; i++) {
-                if (i != 2) { this.description += "\n"; }
-                this.description += lines[i];
+            for (int i = 0; i < 25; i++) {
+                en.getWorld().playEffect(en.getLocation().add(0, 1, 0), Effect.SPELL, 1);
             }
+            en.getWorld().playSound(en.getLocation(), Sound.LEVEL_UP, 5, 0);
+
+            return item;
+        }
+        for (int i = 0; i < 25; i++) {
+            en.getWorld().playEffect(en.getLocation().add(0, 1, 0), Effect.LAVA_POP, 1);
+        }
+        if (rand.nextInt(100) < book.getDestroyRate()) {
+            en.getWorld().playSound(en.getLocation(), Sound.LAVA_POP, 100, 0);
+            return new ItemStack(Material.AIR);
+        } else {
+            return ie.getCurrentItem();
         }
     }
 
-    public String getEnchantmentBookString() {
-        String t = getEnchantName() + " " + getLevel();
-        t += String.format("\n%s%2d%% %s%2d%%", ChatColor.GREEN, getSuccessRate(), ChatColor.RED, getDestroyRate());
-        return (t + "\n" + ChatColor.WHITE + getDescription() + "\n");
+    public ItemStack asItemStack() {
+        ItemStack item = new ItemStack(Material.BOOK);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(
+                Parse.colors.get(getEnchantName()) + "" + ChatColor.BOLD + getEnchantName() + " " + getLevel());
+
+        ArrayList<String> lore = new ArrayList<String>();
+        lore.add(ChatColor.GREEN + "Success Rate: " + getSuccessRate() + "%");
+        lore.add(ChatColor.RED + "Destroy Rate: " + getDestroyRate() + "%");
+        lore.add(ChatColor.YELLOW + getApplicableType() + " Enchantment");
+        lore.add(ChatColor.YELLOW + getDescription());
+
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     public String getEnchantName() {
@@ -70,5 +131,9 @@ public class EnchantmentBook {
 
     public int getDestroyRate() {
         return destroyRate;
+    }
+
+    public String getApplicableType() {
+        return applicableType;
     }
 }

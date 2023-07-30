@@ -23,7 +23,6 @@ public class CustomAnvilCommand implements CommandExecutor {
         for (int i = 0; i < 45; i++) {
             inv.setItem(i, glass);
         }
-        inv.setItem(8 + 3, new ItemStack(Material.AIR));
         inv.setItem(8 + 7, new ItemStack(Material.AIR));
         // ItemMeta diaMeta = dia.getItemMeta();
 

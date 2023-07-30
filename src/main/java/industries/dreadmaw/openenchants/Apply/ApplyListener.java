@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import industries.dreadmaw.openenchants.Plugin;
+import industries.dreadmaw.openenchants.enchants.EnchantmentBook;
 
 public class ApplyListener implements Listener {
     private Plugin plugin;
@@ -29,8 +30,14 @@ public class ApplyListener implements Listener {
                 || e.getCursor().getData().getItemType() == org.bukkit.Material.AIR) {
             return;
         }
-        if (VanillaEnchant.is(e.getCursor())) {
+        if (VanillaEnchant.isValid(e)) {
             e.setCurrentItem(VanillaEnchant.apply(e));
+            e.setCancelled(true);
+            System.out.println("enchanted book!");
+            return;
+        }
+        if (EnchantmentBook.isValid(e)) {
+            e.setCurrentItem(EnchantmentBook.apply(e, plugin));
             e.setCancelled(true);
             System.out.println("enchanted book!");
             return;

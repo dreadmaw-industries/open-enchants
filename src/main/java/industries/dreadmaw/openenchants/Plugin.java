@@ -13,7 +13,7 @@ public final class Plugin extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         getCommand("menu").setExecutor(new MenuCommand());
-        getCommand("customenchant").setExecutor(new CustomEnchantCommand());
+        getCommand("givebook").setExecutor(new GiveBook());
         getCommand("customanvil").setExecutor(new CustomAnvilCommand());
         getServer().getPluginManager().registerEvents(new EListener(this), this);
         getServer().getPluginManager().registerEvents(new MenuListener(this), this);
