@@ -47,7 +47,8 @@ public class Bleed extends Enchantment {
                     // for (int i = 0; i < bleedStacks * 10; i++) {
                     //     en.getWorld().playEffect(en.getLocation().add(0, 1, 0), Effect.TILE_BREAK, 152);
                     // }
-                    en.getWorld().playEffect(en.getLocation(),  Effect.STEP_SOUND, 152, 8);
+                    for (int i = 0; i < lm.get(0).asInt(); i++)
+                        en.getWorld().playEffect(en.getLocation(),  Effect.STEP_SOUND, 152, 8);
                     Bukkit.broadcastMessage("Bleed tick with " + bleedStacks + " stacks");
                     ((LivingEntity) event.getEntity()).damage(1 * bleedStacks);
                 }
