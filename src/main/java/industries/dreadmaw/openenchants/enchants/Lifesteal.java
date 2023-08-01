@@ -16,7 +16,7 @@ public class Lifesteal extends Enchantment {
         Bukkit.broadcastMessage("Lifesteal proc!");
         Entity damager = event.getDamager();
         Player player = (Player) damager;
-        player.setHealth(Math.min(player.getHealth() + this.level, player.getMaxHealth()));
+        player.setHealth(Math.min(player.getHealth() + 0.5 * level, player.getMaxHealth()));
     }
 
 }
