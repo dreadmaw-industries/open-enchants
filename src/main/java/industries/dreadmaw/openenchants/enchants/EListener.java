@@ -20,6 +20,10 @@ public class EListener implements org.bukkit.event.Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
         Entity damager = event.getDamager();
+        String rid = damager.getEntityId() + "" + event.getEntity().getEntityId();
+        //if rage map contains the reverse id, remove it from the map
+        if(EnchantmentState.rageMap.containsKey(rid))
+            EnchantmentState.rageMap.remove(rid);
         if (!(damager instanceof Player)) {
         return;
         }
