@@ -19,6 +19,8 @@ public class CustomEnchantCommand implements CommandExecutor {
         Map<String, ChatColor> myMap = new HashMap<String, ChatColor>() {
             {
                 put("Rage", ChatColor.GOLD);
+                put("Assassin", ChatColor.RED);
+
                 put("Lifesteal", ChatColor.GOLD);
                 put("Bleed", ChatColor.YELLOW);
             }

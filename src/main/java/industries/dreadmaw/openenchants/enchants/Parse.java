@@ -12,11 +12,14 @@ public class Parse {
     static Enchantment getEnchantment(String enchantName, int level, Plugin plugin) {
         if (enchantName.equals(ChatColor.YELLOW + "Bleed")) {
             return new Bleed(level, plugin);
+        
         } else if (enchantName.equals(ChatColor.GOLD + "Lifesteal")) {
             return new Lifesteal(level, plugin);
         } else if (enchantName.equals(ChatColor.GOLD + "Rage")) {
             return new Rage(level, plugin,rageMap);
-        } else {
+        } else if (enchantName.equals(ChatColor.RED + "Assasin")){
+              return new Assassin(level, plugin);
+            }else {
             
             return null;
         } 
