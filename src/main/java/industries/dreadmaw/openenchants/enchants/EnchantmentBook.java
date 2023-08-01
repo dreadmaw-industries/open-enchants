@@ -80,8 +80,8 @@ public class EnchantmentBook implements Applicable {
             
             String toRemove = "";
             for (String enchantString : lore) {
-                enchantString.contains(book.getEnchantName());
-                toRemove = enchantString;
+                if (enchantString.contains(book.getEnchantName()))
+                    toRemove = enchantString;
             }
             if (toRemove != "") {
                 lore.remove(toRemove);

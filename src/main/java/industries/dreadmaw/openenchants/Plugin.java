@@ -15,6 +15,7 @@ public final class Plugin extends JavaPlugin {
         getCommand("menu").setExecutor(new MenuCommand());
         getCommand("givebook").setExecutor(new GiveBook());
         getCommand("customanvil").setExecutor(new CustomAnvilCommand());
+        getCommand("enchanter").setExecutor(new EnchanterCommand());
         getServer().getPluginManager().registerEvents(new EListener(this), this);
         getServer().getPluginManager().registerEvents(new MenuListener(this), this);
         getServer().getPluginManager().registerEvents(new ApplyListener(this), this);
@@ -26,7 +27,7 @@ public final class Plugin extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
 
-        System.out.println("My first plugin has stopped!!! Bye!!!");
+        System.out.println("TESTING THIS PLUGIN, IS IT WORKING ???????");
 
     }
 }

@@ -40,11 +40,11 @@ public class Rage extends Enchantment {
             OE_rageMap.put(id, 0);
         else {
             // if rage map contains the id, increment the counter
-            int counter = OE_rageMap.get(id) + (OE_rageMap.get(id) < 10 ? 1 : 0);
+            int counter = OE_rageMap.get(id) + (OE_rageMap.get(id) <= 6 ? 1 : 0);
 
             OE_rageMap.put(id, counter);
             // if counter is less than or equal to 5, increase damage by 10% per stack
-            event.setDamage(event.getDamage() * Math.pow(1.04 + (0.025 * level), counter));
+            event.setDamage(event.getDamage() * Math.pow(1.05 + (0.025 * level), counter));
             Bukkit.broadcastMessage("Rage " + counter + " " + player.getName() + " " + en.getName() + " Damage : "
                     + event.getFinalDamage());
         }

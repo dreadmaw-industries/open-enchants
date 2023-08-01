@@ -13,3 +13,5 @@ commands:
     description: Enchant stuff
   customanvil:
     description: Enchanting interface
+  enchanter:
+    description: Another enchanting interface?
