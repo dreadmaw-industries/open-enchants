@@ -13,6 +13,7 @@ public class Parse {
     public static HashMap<String, ChatColor> colors = new HashMap<String, ChatColor>() {
             {
                 put("Rage", ChatColor.GOLD);
+                put("Devour", ChatColor.GOLD);
                 put("Lifesteal", ChatColor.GOLD);
                 put("Bleed", ChatColor.YELLOW);
             }
@@ -57,6 +58,8 @@ public class Parse {
             return new Lifesteal(level, plugin);
         } else if (enchantName.equals(ChatColor.GOLD + "Rage")) {
             return new Rage(level, plugin);
+        } else if (enchantName.equals(ChatColor.GOLD + "Devour")) {
+            return new Devour(level, plugin);
         } else {
             
             return null;
