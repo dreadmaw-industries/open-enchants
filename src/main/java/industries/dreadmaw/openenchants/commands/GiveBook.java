@@ -10,10 +10,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-public class CustomEnchantCommand implements CommandExecutor {
+import industries.dreadmaw.openenchants.enchants.EnchantmentBook;
+
+public class GiveBook implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Map<String, ChatColor> myMap = new HashMap<String, ChatColor>() {
@@ -25,20 +25,9 @@ public class CustomEnchantCommand implements CommandExecutor {
         };
         Player p = (Player) sender;
 
-        ItemStack item = p.getItemInHand();
-        ItemMeta meta = item.getItemMeta();
-
-        List<String> lore = new ArrayList<String>();
-        if (meta.hasLore() && args.length != 0) {
-            lore = meta.getLore();
-        } 
-        if (args.length != 0) {
-            lore.add(myMap.get(args[0]) + args[0] + " " + args[1]);
-        } 
-
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-        p.setItemInHand(item);
+        EnchantmentBook testBook = new EnchantmentBook(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]),
+                Integer.parseInt(args[3]), "Test description.", "Axe");
+        p.getInventory().addItem(testBook.asItemStack());
 
         return false;
     }

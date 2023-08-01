@@ -9,7 +9,7 @@ website: https://github.com/dreadmaw-industries/open-enchants.git
 commands:
   menu:
     description: Open the inventory menu
-  customenchant:
+  givebook:
     description: Enchant stuff
   customanvil:
     description: Enchanting interface

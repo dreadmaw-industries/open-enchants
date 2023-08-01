@@ -1,14 +1,31 @@
 package industries.dreadmaw.openenchants.enchants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.ChatColor;
-import java.util.HashMap;
+
 import industries.dreadmaw.openenchants.Plugin;
 
 public class Parse {
     static HashMap<String, Integer> rageMap = new HashMap<String, Integer>();
+    public static HashMap<String, ChatColor> colors = new HashMap<String, ChatColor>() {
+            {
+                put("Rage", ChatColor.GOLD);
+                put("Lifesteal", ChatColor.GOLD);
+                put("Bleed", ChatColor.YELLOW);
+            }
+        };
+        
+    static String strip(String enchantName) {
+        enchantName = enchantName.replace(ChatColor.BOLD.toString(), "");
+        for (Map.Entry<String, ChatColor> entry : colors.entrySet()) {
+            enchantName = enchantName.replace(entry.getValue().toString(), "");
+        }
+        return enchantName;
+    }
     static Enchantment getEnchantment(String enchantName, int level, Plugin plugin) {
         if (enchantName.equals(ChatColor.YELLOW + "Bleed")) {
             return new Bleed(level, plugin);
