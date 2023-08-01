@@ -11,14 +11,16 @@ import industries.dreadmaw.openenchants.Plugin;
 
 public class Parse {
     public static HashMap<String, ChatColor> colors = new HashMap<String, ChatColor>() {
-            {
-                put("Rage", ChatColor.GOLD);
-                put("Devour", ChatColor.GOLD);
-                put("Lifesteal", ChatColor.GOLD);
-                put("Bleed", ChatColor.YELLOW);
-            }
-        };
-    
+        {
+            put("Rage", ChatColor.GOLD);
+            put("Devour", ChatColor.GOLD);
+            put("Lifesteal", ChatColor.GOLD);
+            put("Bleed", ChatColor.YELLOW);
+            put("Assassin", ChatColor.YELLOW);
+            put("Reforged", ChatColor.BLUE);
+        }
+    };
+
     public static HashMap<String, Integer> romanToInt = new HashMap<String, Integer>() {
         {
             put("I", 1);
@@ -35,15 +37,16 @@ public class Parse {
     };
     public static HashMap<Integer, String> intToRoman = romanToInt.entrySet().stream()
             .collect(HashMap::new, (m, v) -> m.put(v.getValue(), v.getKey()), HashMap::putAll);
-    
+
     static Integer safeParseRoman(String roman) {
         return romanToInt.containsKey(roman) ? romanToInt.get(roman) : Integer.parseInt(roman);
     }
 
-    static String safeToRoman(int number) {
+    public static String safeToRoman(int number) {
         return intToRoman.containsKey(number) ? intToRoman.get(number) : Integer.toString(number);
     }
-    static String strip(String enchantName) {
+
+    public static String strip(String enchantName) {
         enchantName = enchantName.replace(ChatColor.BOLD.toString(), "");
         enchantName = enchantName.replace(ChatColor.UNDERLINE.toString(), "");
         for (Map.Entry<String, ChatColor> entry : colors.entrySet()) {
@@ -51,6 +54,7 @@ public class Parse {
         }
         return enchantName;
     }
+
     static Enchantment getEnchantment(String enchantName, int level, Plugin plugin) {
         if (enchantName.equals(ChatColor.YELLOW + "Bleed")) {
             return new Bleed(level, plugin);
@@ -60,17 +64,19 @@ public class Parse {
             return new Rage(level, plugin);
         } else if (enchantName.equals(ChatColor.GOLD + "Devour")) {
             return new Devour(level, plugin);
+        } else if (enchantName.equals(ChatColor.YELLOW + "Assassin")) {
+            return new Assassin(level, plugin);
         } else {
-            
+
             return null;
-        } 
+        }
     }
-    
+
     static List<Enchantment> parseEnchantments(List<String> lore, Plugin plugin) {
         List<Enchantment> enchants = new ArrayList<Enchantment>();
         for (String line : lore) {
             String[] split = line.split(" ");
-            if (split.length !=  2) {
+            if (split.length != 2) {
                 continue;
             }
             String enchantName = split[0];

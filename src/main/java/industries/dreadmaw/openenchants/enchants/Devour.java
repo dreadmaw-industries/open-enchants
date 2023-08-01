@@ -23,12 +23,11 @@ public class Devour extends Enchantment {
         if (en.hasMetadata("OE_bleedStacks")) {
             List<MetadataValue> lm = en.getMetadata("OE_bleedStacks");
             
-            for (int i = 0; i < lm.get(0).asInt(); i++)
-                en.getWorld().playEffect(en.getLocation(), Effect.STEP_SOUND, 152, 8);
+            en.getWorld().playEffect(en.getLocation(), Effect.STEP_SOUND, 152, 8);
 
             int bleedStacks = lm.get(0).asInt();
 
-            event.setDamage(event.getDamage() * Math.pow(1.04 + (0.025 * level), bleedStacks));
+            event.setDamage(event.getDamage() * Math.pow(1.00 + (0.025 * level), bleedStacks));
         }
     }
 

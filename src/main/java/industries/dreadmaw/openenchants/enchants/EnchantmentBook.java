@@ -57,11 +57,8 @@ public class EnchantmentBook implements Applicable {
 
         EnchantmentBook book = new EnchantmentBook(ie.getCursor());
 
-        System.out.println(book.getApplicableType());
-        if (book.getApplicableType().equals("Axe") && (ie.getCurrentItem().getType() == Material.DIAMOND_AXE
-                || ie.getCurrentItem().getType() == Material.IRON_AXE
-                || ie.getCurrentItem().getType() == Material.STONE_AXE
-                || ie.getCurrentItem().getType() == Material.WOOD_AXE)) {
+        Material iType = ie.getCurrentItem().getType();
+        if (iType.toString().contains(book.getApplicableType().toUpperCase())) {
             return true;
         }
         return false;
@@ -80,8 +77,8 @@ public class EnchantmentBook implements Applicable {
             
             String toRemove = "";
             for (String enchantString : lore) {
-                enchantString.contains(book.getEnchantName());
-                toRemove = enchantString;
+                if (enchantString.contains(book.getEnchantName()))
+                    toRemove = enchantString;
             }
             if (toRemove != "") {
                 lore.remove(toRemove);
