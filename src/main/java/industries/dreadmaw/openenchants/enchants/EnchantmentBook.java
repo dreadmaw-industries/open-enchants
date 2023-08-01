@@ -54,7 +54,9 @@ public class EnchantmentBook implements Applicable {
             System.out.println(e);
             return false;
         }
+
         EnchantmentBook book = new EnchantmentBook(ie.getCursor());
+
         System.out.println(book.getApplicableType());
         if (book.getApplicableType().equals("Axe") && (ie.getCurrentItem().getType() == Material.DIAMOND_AXE
                 || ie.getCurrentItem().getType() == Material.IRON_AXE
@@ -70,12 +72,22 @@ public class EnchantmentBook implements Applicable {
         EnchantmentBook book = new EnchantmentBook(ie.getCursor());
         Random rand = new Random();
         HumanEntity en = ie.getWhoClicked();
+        ItemStack item = ie.getCurrentItem();
         if (rand.nextInt(100) < book.getSuccessRate()) {
-            ItemStack item = ie.getCurrentItem();
             ItemMeta meta = item.hasItemMeta() ? item.getItemMeta()
                     : Bukkit.getItemFactory().getItemMeta(item.getType());
             ArrayList<String> lore = meta.hasLore() ? (ArrayList<String>) meta.getLore() : new ArrayList<String>();
-            lore.add(Parse.colors.get(Parse.strip(book.getEnchantName())) + book.getEnchantName() + " "
+            
+            String toRemove = "";
+            for (String enchantString : lore) {
+                enchantString.contains(book.getEnchantName());
+                toRemove = enchantString;
+            }
+            if (toRemove != "") {
+                lore.remove(toRemove);
+            }
+
+            lore.add(Parse.colors.get(book.getEnchantName()) + book.getEnchantName() + " "
                     + Parse.safeToRoman(book.getLevel()));
             meta.setLore(lore);
             item.setItemMeta(meta);
@@ -94,7 +106,7 @@ public class EnchantmentBook implements Applicable {
             en.getWorld().playSound(en.getLocation(), Sound.LAVA_POP, 100, 0);
             return new ItemStack(Material.AIR);
         } else {
-            return ie.getCurrentItem();
+            return item;
         }
     }
 
