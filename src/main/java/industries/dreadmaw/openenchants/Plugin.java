@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import industries.dreadmaw.openenchants.Apply.ApplyListener;
 import industries.dreadmaw.openenchants.commands.*;
 import industries.dreadmaw.openenchants.enchants.EListener;
-import industries.dreadmaw.openenchants.menus.*;
+import industries.dreadmaw.openenchants.menus.MenuListener;
 
 public final class Plugin extends JavaPlugin {
 

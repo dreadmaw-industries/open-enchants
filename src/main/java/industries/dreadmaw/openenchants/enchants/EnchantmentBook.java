@@ -36,11 +36,11 @@ public class EnchantmentBook implements Applicable {
         ItemMeta meta = item.getItemMeta();
         String[] split = meta.getDisplayName().split(" ");
         enchantName = Parse.strip(split[0]);
-        level = Integer.parseInt(split[1]);
+        level = Parse.safeParseRoman(split[1]);
         ArrayList<String> lore = (ArrayList<String>) meta.getLore();
         successRate = Integer.parseInt(lore.get(0).split(" ")[2].split("%")[0]);
         destroyRate = Integer.parseInt(lore.get(1).split(" ")[2].split("%")[0]);
-        applicableType = lore.get(2).split(" ")[0];
+        applicableType = Parse.strip(lore.get(2).split(" ")[0]);
         description = lore.get(3);
     }
 
@@ -55,13 +55,14 @@ public class EnchantmentBook implements Applicable {
             return false;
         }
         EnchantmentBook book = new EnchantmentBook(ie.getCursor());
-        if (book.getApplicableType() == "Axe" && (ie.getCurrentItem().getType() == Material.DIAMOND_AXE
+        System.out.println(book.getApplicableType());
+        if (book.getApplicableType().equals("Axe") && (ie.getCurrentItem().getType() == Material.DIAMOND_AXE
                 || ie.getCurrentItem().getType() == Material.IRON_AXE
                 || ie.getCurrentItem().getType() == Material.STONE_AXE
                 || ie.getCurrentItem().getType() == Material.WOOD_AXE)) {
             return true;
         }
-        return true;
+        return false;
 
     }
 
@@ -74,7 +75,8 @@ public class EnchantmentBook implements Applicable {
             ItemMeta meta = item.hasItemMeta() ? item.getItemMeta()
                     : Bukkit.getItemFactory().getItemMeta(item.getType());
             ArrayList<String> lore = meta.hasLore() ? (ArrayList<String>) meta.getLore() : new ArrayList<String>();
-            lore.add(Parse.colors.get(book.getEnchantName()) + book.getEnchantName() + " " + book.getLevel());
+            lore.add(Parse.colors.get(Parse.strip(book.getEnchantName())) + book.getEnchantName() + " "
+                    + Parse.safeToRoman(book.getLevel()));
             meta.setLore(lore);
             item.setItemMeta(meta);
 
@@ -100,7 +102,8 @@ public class EnchantmentBook implements Applicable {
         ItemStack item = new ItemStack(Material.BOOK);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(
-                Parse.colors.get(getEnchantName()) + "" + ChatColor.BOLD + getEnchantName() + " " + getLevel());
+                Parse.colors.get(getEnchantName()) + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + getEnchantName()
+                        + " " + Parse.safeToRoman(getLevel()));
 
         ArrayList<String> lore = new ArrayList<String>();
         lore.add(ChatColor.GREEN + "Success Rate: " + getSuccessRate() + "%");

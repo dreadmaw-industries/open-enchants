@@ -17,9 +17,34 @@ public class Parse {
                 put("Bleed", ChatColor.YELLOW);
             }
         };
-        
+    
+    public static HashMap<String, Integer> romanToInt = new HashMap<String, Integer>() {
+        {
+            put("I", 1);
+            put("II", 2);
+            put("III", 3);
+            put("IV", 4);
+            put("V", 5);
+            put("VI", 6);
+            put("VII", 7);
+            put("IIX", 8);
+            put("IX", 9);
+            put("X", 10);
+        }
+    };
+    public static HashMap<Integer, String> intToRoman = romanToInt.entrySet().stream()
+            .collect(HashMap::new, (m, v) -> m.put(v.getValue(), v.getKey()), HashMap::putAll);
+    
+    static Integer safeParseRoman(String roman) {
+        return romanToInt.containsKey(roman) ? romanToInt.get(roman) : Integer.parseInt(roman);
+    }
+
+    static String safeToRoman(int number) {
+        return intToRoman.containsKey(number) ? intToRoman.get(number) : Integer.toString(number);
+    }
     static String strip(String enchantName) {
         enchantName = enchantName.replace(ChatColor.BOLD.toString(), "");
+        enchantName = enchantName.replace(ChatColor.UNDERLINE.toString(), "");
         for (Map.Entry<String, ChatColor> entry : colors.entrySet()) {
             enchantName = enchantName.replace(entry.getValue().toString(), "");
         }
@@ -30,10 +55,14 @@ public class Parse {
             return new Bleed(level, plugin);
         } else if (enchantName.equals(ChatColor.GOLD + "Lifesteal")) {
             return new Lifesteal(level, plugin);
+        } else if (enchantName.equals(ChatColor.GOLD + "Rage")) {
+            return new Rage(level, plugin);
         } else {
+            
             return null;
-        }
+        } 
     }
+    
     static List<Enchantment> parseEnchantments(List<String> lore, Plugin plugin) {
         List<Enchantment> enchants = new ArrayList<Enchantment>();
         for (String line : lore) {
@@ -42,7 +71,7 @@ public class Parse {
                 continue;
             }
             String enchantName = split[0];
-            int level = Integer.parseInt(split[1]);
+            Integer level = safeParseRoman(split[1]);
             Enchantment enchant = getEnchantment(enchantName, level, plugin);
             if (enchant != null) {
                 enchants.add(enchant);
