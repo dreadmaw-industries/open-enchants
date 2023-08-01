@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -41,9 +44,10 @@ public class Bleed extends Enchantment {
                 }
 
                 if (tickCount-- % 20 == 0) {
-                    for (int i = 0; i < bleedStacks * 10; i++) {
-                        en.getWorld().playEffect(en.getLocation().add(0, 1, 0), Effect.TILE_BREAK, 152);
-                    }
+                    // for (int i = 0; i < bleedStacks * 10; i++) {
+                    //     en.getWorld().playEffect(en.getLocation().add(0, 1, 0), Effect.TILE_BREAK, 152);
+                    // }
+                    en.getWorld().playEffect(en.getLocation(),  Effect.STEP_SOUND, 152, 8);
                     Bukkit.broadcastMessage("Bleed tick with " + bleedStacks + " stacks");
                     ((LivingEntity) event.getEntity()).damage(1 * bleedStacks);
                 }
