@@ -2,6 +2,7 @@ package industries.dreadmaw.openenchants.enchants;
 
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,6 +29,8 @@ public class EListener implements org.bukkit.event.Listener {
         return;
         }
         ItemStack item = ((Player) event.getDamager()).getItemInHand();
+        if (item.getType() == Material.AIR)
+            return;
         if (item.getItemMeta().hasLore()) {
             List<Enchantment> enchantments = Parse.parseEnchantments(item.getItemMeta().getLore(), plugin);
             for (Enchantment enchantment : enchantments) {
