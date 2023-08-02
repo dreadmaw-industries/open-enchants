@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import industries.dreadmaw.openenchants.Apply.ApplyListener;
 import industries.dreadmaw.openenchants.commands.*;
 import industries.dreadmaw.openenchants.enchants.EListener;
+import industries.dreadmaw.openenchants.enchants.OpenBookListener;
 
 public final class Plugin extends JavaPlugin {
 
@@ -18,6 +19,7 @@ public final class Plugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EListener(this), this);
         getServer().getPluginManager().registerEvents(new ApplyListener(this), this);
         getServer().getPluginManager().registerEvents(new EnchanterListener(this), this);
+        getServer().getPluginManager().registerEvents(new OpenBookListener(this), this);
         System.out.println("My first plugin has started!!! Hello!!!");
 
     }
