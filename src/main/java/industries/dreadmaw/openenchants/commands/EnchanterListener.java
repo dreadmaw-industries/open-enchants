@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import industries.dreadmaw.openenchants.Plugin;
+import industries.dreadmaw.openenchants.enchants.EnchantmentBook;
 import industries.dreadmaw.openenchants.enchants.Parse;
 
 public class EnchanterListener implements org.bukkit.event.Listener {
@@ -29,14 +30,9 @@ public class EnchanterListener implements org.bukkit.event.Listener {
         e.setCancelled(true);
         Player p = (Player) e.getWhoClicked();
         String msg = ChatColor.RED + "" + ChatColor.BOLD + "You do not have enough experience!";
+        String name = Parse.strip(e.getCurrentItem().getItemMeta().getDisplayName());
 
-        ItemStack randomBook = new ItemStack(Material.BOOK);
-        ItemMeta meta = randomBook.getItemMeta();
-        List<String> lore = Arrays.asList(ChatColor.GRAY + "... then right click to apply.");
-        meta.setLore(lore);
-
-        String rightClick = ChatColor.RESET + "" + ChatColor.GRAY + " (Right Click)";
-        switch (Parse.strip(e.getCurrentItem().getItemMeta().getDisplayName())) {
+        switch (name) {
             case "Elite":
                 if (p.getTotalExperience() >= 2500) {
                     int prev = p.getTotalExperience();
@@ -44,9 +40,7 @@ public class EnchanterListener implements org.bukkit.event.Listener {
                     p.setTotalExperience(0);
                     p.giveExp(prev -2500);
 
-                    meta.setDisplayName(ChatColor.BLUE + "Elite Enchantment Book" + rightClick);
-                    randomBook.setItemMeta(meta);
-                    p.getInventory().addItem(randomBook);
+                    p.getInventory().addItem(EnchantmentBook.makeClosed("Elite"));
                 } else {
                     p.sendMessage(msg);
                 }
@@ -58,9 +52,7 @@ public class EnchanterListener implements org.bukkit.event.Listener {
                     p.setTotalExperience(0);
                     p.giveExp(prev -5000);
 
-                    meta.setDisplayName(ChatColor.YELLOW + "Ultimate Enchantment Book" + rightClick);
-                    randomBook.setItemMeta(meta);
-                    p.getInventory().addItem(randomBook);
+                    p.getInventory().addItem(EnchantmentBook.makeClosed("Ultimate"));
                 } else {
                     p.sendMessage(msg);
                 }
@@ -72,9 +64,7 @@ public class EnchanterListener implements org.bukkit.event.Listener {
                     p.setTotalExperience(0);
                     p.giveExp(prev -12500);
 
-                    meta.setDisplayName(ChatColor.GOLD + "Legendary Enchantment Book" + rightClick);
-                    randomBook.setItemMeta(meta);
-                    p.getInventory().addItem(randomBook);
+                    p.getInventory().addItem(EnchantmentBook.makeClosed("Legendary"));
                 } else {
                     p.sendMessage(msg);
                 }

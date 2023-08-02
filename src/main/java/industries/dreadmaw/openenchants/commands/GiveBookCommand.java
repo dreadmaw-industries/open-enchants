@@ -14,7 +14,7 @@ public class GiveBookCommand implements CommandExecutor {
 
         EnchantmentBook testBook = new EnchantmentBook(args[0], Integer.parseInt(args[2]), Integer.parseInt(args[3]),
                 Integer.parseInt(args[4]), "Test description.", args[1]);
-        p.getInventory().addItem(testBook.asItemStack());
+        p.getInventory().addItem(testBook.toItemStack());
 
         return false;
     }

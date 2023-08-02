@@ -1,6 +1,8 @@
 package industries.dreadmaw.openenchants.enchants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -44,6 +46,59 @@ public class EnchantmentBook implements Applicable {
         description = lore.get(3);
     }
 
+    public EnchantmentBook(EnchantmentTemplate template) {
+        Random r = new Random();
+        this.enchantName = template.getName();
+        this.level = r.nextInt(template.getMaxLevel()) + 1;
+        this.successRate = r.nextInt(100) + 1;
+        this.destroyRate = r.nextInt(100) + 1;
+        this.description = template.getDescription().get(0);
+        this.applicableType = template.getApplicableType();
+    }
+
+    public static ItemStack makeClosed(String tier) {
+        ItemStack randomBook = new ItemStack(Material.BOOK);
+        ItemMeta meta = randomBook.getItemMeta();
+        List<String> lore = Arrays.asList(ChatColor.GRAY + "... then right click an item with the book to apply.");
+        meta.setLore(lore);
+
+        String rightClick = ChatColor.RESET + "" + ChatColor.GRAY + " (Right Click)";
+        if (tier.equals("Elite")) {
+            meta.setDisplayName(ChatColor.BLUE + "Elite Enchantment Book" + rightClick);
+        } else if (tier.equals("Ultimate")) {
+            meta.setDisplayName(ChatColor.YELLOW + "Ultimate Enchantment Book" + rightClick);
+        } else if (tier.equals("Legendary")) {
+            meta.setDisplayName(ChatColor.GOLD + "Legendary Enchantment Book" + rightClick);
+        }
+        randomBook.setItemMeta(meta);
+        return randomBook;
+    }
+
+    public static boolean isClosedBook(ItemStack item) {
+        for (String tier : Arrays.asList("Elite", "Ultimate", "Legendary")) {
+            if (makeClosed(tier).getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static ItemStack makeOpen(String tier) {
+        Random r = new Random();
+        switch (tier) {
+            case "Elite":
+                return new EnchantmentBook(EnchantmentTemplate.pool.get("Elite")
+                        .get(r.nextInt(EnchantmentTemplate.pool.get("Elite").size()))).toItemStack();
+            case "Ultimate":
+                return new EnchantmentBook(EnchantmentTemplate.pool.get("Ultimate")
+                        .get(r.nextInt(EnchantmentTemplate.pool.get("Ultimate").size()))).toItemStack();
+            case "Legendary":
+                return new EnchantmentBook(EnchantmentTemplate.pool.get("Legendary")
+                        .get(r.nextInt(EnchantmentTemplate.pool.get("Legendary").size()))).toItemStack();
+        }
+        return null;
+    }
+
     public static boolean isValid(InventoryClickEvent ie) {
         if (!ie.getCursor().getType().equals(Material.BOOK)) {
             return false;
@@ -57,8 +112,11 @@ public class EnchantmentBook implements Applicable {
 
         EnchantmentBook book = new EnchantmentBook(ie.getCursor());
 
-        Material iType = ie.getCurrentItem().getType();
-        if (iType.toString().contains(book.getApplicableType().toUpperCase())) {
+        String iType = ie.getCurrentItem().getType().toString().toUpperCase();
+        if (iType.contains(book.getApplicableType().toUpperCase())) {
+            return true;
+        }
+        if (book.getApplicableType().equals("Weapon") && (iType.contains("AXE") || iType.contains("SWORD"))) {
             return true;
         }
         return false;
@@ -74,7 +132,7 @@ public class EnchantmentBook implements Applicable {
             ItemMeta meta = item.hasItemMeta() ? item.getItemMeta()
                     : Bukkit.getItemFactory().getItemMeta(item.getType());
             ArrayList<String> lore = meta.hasLore() ? (ArrayList<String>) meta.getLore() : new ArrayList<String>();
-            
+
             String toRemove = "";
             for (String enchantString : lore) {
                 if (enchantString.contains(book.getEnchantName()))
@@ -107,7 +165,7 @@ public class EnchantmentBook implements Applicable {
         }
     }
 
-    public ItemStack asItemStack() {
+    public ItemStack toItemStack() {
         ItemStack item = new ItemStack(Material.BOOK);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(
